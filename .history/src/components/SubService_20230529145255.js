@@ -110,7 +110,6 @@ const SubService = () => {
         `);
       console.log(data);
       toast.success("Deleted");
-      fetchData()
     } catch (e) {
       console.log(e);
     }
@@ -153,8 +152,9 @@ const SubService = () => {
                 <td>
                     <i
                       className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
+                      onChange={() => deleteHandler(i._id)}
                     ></i>
+                  </span>
                 </td>
               </tr>
             ))}

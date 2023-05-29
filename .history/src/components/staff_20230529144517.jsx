@@ -223,7 +223,7 @@ const Staff = () => {
         </div>
       </div>
 
-      <div className="overflowCont" style={{padding : '20px'}}>
+      <div className="overflowCont" sty>
         <Table className="NewTable">
           <thead>
             <tr>

@@ -105,16 +105,12 @@ const SubService = () => {
 
   const deleteHandler = async (id) => {
     try {
-      const { data } =
-        await axios.delete(`https://nishant-jain12.vercel.app/api/v1/subservi/${id}
-        `);
-      console.log(data);
-      toast.success("Deleted");
-      fetchData()
-    } catch (e) {
-      console.log(e);
+        const { data } = await axios.delete(`https://nishant-jain12.vercel.app/api/v1/subservi/${id}
+        `)
+    }catch(e) { 
+
     }
-  };
+  }
 
   return (
     <>
@@ -151,10 +147,9 @@ const SubService = () => {
                 </td>
                 <td>{i.subServices}</td>
                 <td>
-                    <i
-                      className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
-                    ></i>
+                  <span>
+                    <i className="fa-solid fa-trash"></i>
+                  </span>
                 </td>
               </tr>
             ))}

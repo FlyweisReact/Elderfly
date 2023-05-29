@@ -110,7 +110,6 @@ const SubService = () => {
         `);
       console.log(data);
       toast.success("Deleted");
-      fetchData()
     } catch (e) {
       console.log(e);
     }
