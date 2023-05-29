@@ -224,7 +224,7 @@ const Staff = () => {
       </div>
 
       <div className="overflowCont" style={{padding : '20px'}}>
-        <Table className="NewTable" style={{width : '80%'}}>
+        <Table className="NewTable" >
           <thead>
             <tr>
               <th>Number</th>
