@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import HOC from "../HOC";
 import { Table } from "react-bootstrap";
 import axios from "axios";
+
 const Payment = () => {
   const [data, setData] = useState([]);
 

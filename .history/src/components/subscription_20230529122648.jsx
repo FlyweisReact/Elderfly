@@ -17,7 +17,7 @@ const Subs = () => {
       const { data } = await axios.get(
         "https://nishant-jain12.vercel.app/api/v1/subcriptions"
       );
-      setData(data.msg);
+      setData(data);
       console.log(data)
     } catch (e) {
       console.log(e);
