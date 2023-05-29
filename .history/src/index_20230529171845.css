@@ -507,14 +507,13 @@ code {
   color: #ffffff;
 }
 .dashboard-four-cont {
+  /* display: grid;
+  grid-template-columns: auto auto auto auto; */
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-evenly;
   margin-top: 20px;
 }
-.dashboard-four-con div{
-  width: 20%;
-}
+
 /*===== Subscription Styling =====*/
 .Three-Cont {
   display: grid;

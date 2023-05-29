@@ -507,6 +507,8 @@ code {
   color: #ffffff;
 }
 .dashboard-four-cont {
+  /* display: grid;
+  grid-template-columns: auto auto auto auto; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
