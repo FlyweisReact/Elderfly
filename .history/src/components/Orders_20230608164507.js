@@ -37,7 +37,7 @@ const Orders = () => {
         const { data } = await axios.put(
           `https://nishant-jain12.vercel.app/api/v1/orderr/${id}`,
           {
-            status,
+            status : true,
           }
         );
         console.log(data.success);

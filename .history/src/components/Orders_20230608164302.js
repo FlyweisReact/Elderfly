@@ -18,6 +18,7 @@ const Orders = () => {
         "https://nishant-jain12.vercel.app/api/v1/orderr"
       );
       setOrder(data.data);
+      console.log(data)
     } catch (e) {
       console.log(e);
     }
@@ -115,8 +116,8 @@ const Orders = () => {
             {order?.map((i, index) => (
               <tr key={index}>
                 <td> {index + 1} </td>
-                <td> {i.subservicesId?.subServices} </td>
-                <td> {i.userId?.name} </td>
+                <td> {i.subservicesId} </td>
+                <td> {i.userId} </td>
                 <td> {i.Call} </td>
                 <td> {i.date} </td>
                 <td> {i.time} </td>

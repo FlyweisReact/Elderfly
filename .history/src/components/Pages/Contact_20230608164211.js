@@ -135,7 +135,7 @@ const Contact = () => {
                 <td> #{index + 1} </td>
 
                 <td>{i.data}</td>
-                <td>{i.title}</td>
+                <td>{i.email}</td>
                 <td>
                   <span>
                     <i

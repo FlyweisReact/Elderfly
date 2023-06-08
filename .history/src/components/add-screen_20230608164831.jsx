@@ -16,6 +16,7 @@ const AddScreen = () => {
         "https://nishant-jain12.vercel.app/api/v1/blog"
       );
       setData(data.blogs);
+      console.log(data)
     } catch (e) {
       console.log(e);
     }

@@ -134,8 +134,8 @@ const Contact = () => {
               <tr key={index}>
                 <td> #{index + 1} </td>
 
-                <td>{i.data}</td>
-                <td>{i.title}</td>
+                <td>{i.phone}</td>
+                <td>{i.email}</td>
                 <td>
                   <span>
                     <i

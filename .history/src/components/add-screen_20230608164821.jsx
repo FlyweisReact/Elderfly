@@ -15,7 +15,8 @@ const AddScreen = () => {
       const { data } = await axios.get(
         "https://nishant-jain12.vercel.app/api/v1/blog"
       );
-      setData(data.blogs);
+      setData(data);
+      console.log(data)
     } catch (e) {
       console.log(e);
     }

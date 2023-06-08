@@ -16,7 +16,7 @@ const Contact = () => {
       const { data } = await axios.get(
         "https://nishant-jain12.vercel.app/api/v1/contact"
       );
-      setData(data.msg);
+      setData(data.data);
       console.log(data)
     } catch (e) {
       console.log(e);
@@ -37,8 +37,8 @@ const Contact = () => {
         const { data } = await axios.post(
           "https://nishant-jain12.vercel.app/api/v1/contact",
           {
-            data :phone,
-            title :email,
+            phone,
+            email,
           }
         );
         console.log(data);
@@ -134,8 +134,8 @@ const Contact = () => {
               <tr key={index}>
                 <td> #{index + 1} </td>
 
-                <td>{i.data}</td>
-                <td>{i.title}</td>
+                <td>{i.phone}</td>
+                <td>{i.email}</td>
                 <td>
                   <span>
                     <i
