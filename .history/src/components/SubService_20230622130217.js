@@ -71,7 +71,7 @@ const SubService = () => {
     const [subServices, setSubService] = useState("");
     const [colour, setColor] = useState("");
     const [spinActivate, setSpinActivate] = useState(false);
-    const [imageStatus, setImageStatus] = useState(false);
+    const [ imageStatus , setImageStatus ] = useState(false)
 
     const uploadImage = (e) => {
       setSpinActivate(true);
@@ -87,7 +87,7 @@ const SubService = () => {
         .then((data) => {
           setImage(data.url);
           setSpinActivate(false);
-          setImageStatus(true);
+          setImageStatus(true)
         })
         .catch((err) => {
           console.log(err);
@@ -136,6 +136,7 @@ const SubService = () => {
     return (
       <Modal
         {...props}
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -154,11 +155,9 @@ const SubService = () => {
               ""
             )}
 
-            {imageStatus ? (
-              <Alert variant="success">Image Uploaded </Alert>
-            ) : (
-              ""
-            )}
+            {
+              imageStatus ? <Alert></Alert>
+            }
 
             <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>

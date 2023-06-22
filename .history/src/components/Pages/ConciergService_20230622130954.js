@@ -13,9 +13,7 @@ import Navbar from "../navbar";
 
 const ConciergService = () => {
   const [data, setData] = useState([]);
-  const [modalShow, setModalShow] = useState(false)
-  const [edit, setEdit] = useState(false);
-  const [id, setId] = useState("");
+  const [modalShow, setModalShow] = useState(false);
 
   // Pagination and Filter
   const [query, setQuery] = useState("");
@@ -74,11 +72,8 @@ const ConciergService = () => {
 
   function MyVerticallyCenteredModal(props) {
     const [services, setServices] = useState([]);
-    const [name, setName] = useState([]);
+    const [name, setName] = useState("");
 
-    const addService = (newService) => {
-      setName((prevServices) => [...prevServices, newService]);
-    };
 
     const fetchServices = async () => {
       try {
@@ -115,31 +110,6 @@ const ConciergService = () => {
       }
     };
 
-    const putHandler = async (e) => {
-      e.preventDefault();
-      try {
-        const { data } = await axios.put(
-          `https://nishant-jain12.vercel.app/api/v1/conciergeser/${id}`,
-          {
-            services: name,
-          }
-        );
-        console.log(data);
-        fetchData();
-        props.onHide();
-        toast.success("Added");
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    
-  const handleSelectChange = (event) => {
-    const selectedService = event.target.value;
-    addService(selectedService);
-  };
-
-
     return (
       <Modal
         {...props}
@@ -148,18 +118,17 @@ const ConciergService = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          {edit ? " Edit  " : "Add"}  Concierg Service{" "}
+            Add Concierg Service{" "}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={edit ? putHandler : postHandler}>
+          <Form onSubmit={postHandler}>
             <Form.Select
               aria-label="Default select example"
               className="mb-3"
-              multiple
-              onChange={handleSelectChange}
+              onChange={(e) => setName(e.target.value)}
             >
-              <option disabled>Select Services</option>
+              <option>Select Services</option>
               {services?.map((i, index) => (
                 <option key={index} value={i._id}>
                   {" "}
@@ -214,10 +183,7 @@ const ConciergService = () => {
           <h4>Concierge Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button  onClick={() => {
-              setEdit(false);
-              setModalShow(true);
-            }}> + Create New</button>
+          <button onClick={() => setModalShow(true)}> + Create New</button>
         </div>
       </div>
 
@@ -269,20 +235,12 @@ const ConciergService = () => {
                     ))}
                   </td>
                   <td>
-                  <span style={{ display: "flex", gap: "5px" }}>
-                    <i
-                      className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
-                    ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
-                  </span>
+                    <span>
+                      <i
+                        className="fa-solid fa-trash"
+                        onClick={() => deleteHandler(i._id)}
+                      ></i>
+                    </span>
                   </td>
                 </tr>
               ))}

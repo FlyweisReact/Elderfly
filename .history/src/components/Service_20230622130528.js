@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import HOC from "./HOC";
-import { Alert, Table } from "react-bootstrap";
+import { Alert, Spinner, Table } from "react-bootstrap";
 import axios from "axios";
-import { Form, Modal, Spinner } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Navbar from "./navbar";
 
-const SubService = () => {
+const Service = () => {
   const [data, setData] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -25,7 +25,7 @@ const SubService = () => {
 
   const TotolData = query
     ? data?.filter((i) =>
-        i?.subServices?.toLowerCase().includes(query?.toLowerCase())
+        i?.service?.toLowerCase().includes(query?.toLowerCase())
       )
     : data;
 
@@ -54,9 +54,9 @@ const SubService = () => {
   const fetchData = async () => {
     try {
       const { data } = await axios.get(
-        "https://nishant-jain12.vercel.app/api/v1/subservi"
+        "https://nishant-jain12.vercel.app/api/v1/servic"
       );
-      setData(data);
+      setData(data.msg);
     } catch (e) {
       console.log(e);
     }
@@ -68,10 +68,28 @@ const SubService = () => {
 
   function MyVerticallyCenteredModal(props) {
     const [image, setImage] = useState("");
-    const [subServices, setSubService] = useState("");
-    const [colour, setColor] = useState("");
+    const [subServices, setSubService] = useState([]);
+    const [service, setService] = useState("");
+    const [subData, setSubData] = useState([]);
     const [spinActivate, setSpinActivate] = useState(false);
     const [imageStatus, setImageStatus] = useState(false);
+
+    const getSubService = async () => {
+      try {
+        const { data } = await axios.get(
+          "https://nishant-jain12.vercel.app/api/v1/subservi"
+        );
+        setSubData(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    useEffect(() => {
+      if (props.show === true) {
+        getSubService();
+      }
+    }, [props.show]);
 
     const uploadImage = (e) => {
       setSpinActivate(true);
@@ -98,11 +116,11 @@ const SubService = () => {
       e.preventDefault();
       try {
         const { data } = await axios.post(
-          "https://nishant-jain12.vercel.app/api/v1/subservi",
+          "https://nishant-jain12.vercel.app/api/v1/servic",
           {
             image,
-            subServices,
-            colour,
+            subservices: subServices,
+            service,
           }
         );
         console.log(data);
@@ -118,10 +136,11 @@ const SubService = () => {
       e.preventDefault();
       try {
         const { data } = await axios.put(
-          `https://nishant-jain12.vercel.app/api/v1/subservi/${id}`,
+          `https://nishant-jain12.vercel.app/api/v1/servic/${id}`,
           {
             image,
-            subServices,
+            service,
+            subservices: subServices,
           }
         );
         console.log(data);
@@ -141,7 +160,7 @@ const SubService = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {edit ? " Edit  " : "Add"} Sub-Service
+            {edit ? " Edit  " : "Add"} Service
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -159,30 +178,32 @@ const SubService = () => {
             ) : (
               ""
             )}
-
             <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
               <Form.Control type="file" onChange={(e) => uploadImage(e)} />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Service Name</Form.Label>
               <Form.Control
                 type="text"
-                onChange={(e) => setSubService(e.target.value)}
+                onChange={(e) => setService(e.target.value)}
               />
             </Form.Group>
-            {edit ? (
-              " "
-            ) : (
-              <Form.Group className="mb-3">
-                <Form.Label>Color</Form.Label>
-                <Form.Control
-                  type="text"
-                  onChange={(e) => setColor(e.target.value)}
-                />
-              </Form.Group>
-            )}
+
+            <Form.Select
+              aria-label="Default select example"
+              className="mb-3"
+              onChange={(e) => setSubService(e.target.value)}
+            >
+              <option>-- Select Sub-Service --</option>
+              {subData?.map((i, index) => (
+                <option key={index} value={i._id}>
+                  {" "}
+                  {i.subServices}{" "}
+                </option>
+              ))}
+            </Form.Select>
 
             <button type="submit" className="SubmitBtn">
               Submit
@@ -195,10 +216,10 @@ const SubService = () => {
 
   const deleteHandler = async (id) => {
     try {
-      const { data } =
-        await axios.delete(`https://nishant-jain12.vercel.app/api/v1/subservi/${id}
-        `);
-      console.log(data);
+      const { data } = await axios.delete(
+        `https://nishant-jain12.vercel.app/api/v1/servic/${id}`
+      );
+      console.log(data.message);
       toast.success("Deleted");
       fetchData();
     } catch (e) {
@@ -214,20 +235,16 @@ const SubService = () => {
       />
 
       <Navbar setQuery={setQuery} />
+
       <div className="Head">
         <div>
-          <h4>Sub-Service (Total : {data?.length}) </h4>
+          <h4>Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button
-            onClick={() => {
+          <button  onClick={() => {
               setEdit(false);
               setModalShow(true);
-            }}
-          >
-            {" "}
-            + Create New
-          </button>
+            }}> + Create New</button>
         </div>
       </div>
 
@@ -237,8 +254,8 @@ const SubService = () => {
             <tr>
               <td>Number</td>
               <td>Image</td>
+              <td> Service </td>
               <td> Sub-Service </td>
-              <td>Color</td>
               <td>Options</td>
             </tr>
           </thead>
@@ -249,22 +266,20 @@ const SubService = () => {
                 <td>
                   <img src={i.image} alt="" style={{ width: "60px" }} />
                 </td>
-                <td>{i.subServices}</td>
-                <td>{i.colour}</td>
+                <td>{i.service}</td>
                 <td>
-                  <span style={{ display: "flex", gap: "5px" }}>
+                  {i.subservices?.map((item, index) => (
+                    <ul key={index}>
+                      <li> {item.subServices} </li>
+                    </ul>
+                  ))}
+                </td>
+                <td>
+                  <span>
                     <i
                       className="fa-solid fa-trash"
                       onClick={() => deleteHandler(i._id)}
                     ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
                   </span>
                 </td>
               </tr>
@@ -319,4 +334,4 @@ const SubService = () => {
   );
 };
 
-export default HOC(SubService);
+export default HOC(Service);

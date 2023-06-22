@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import HOC from "./HOC";
-import { Alert, Spinner, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import axios from "axios";
 import { Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -14,42 +14,43 @@ const Service = () => {
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState("");
 
-  // Pagination and Filter
-  const [query, setQuery] = useState("");
-  const [currentPage2, setCurrentPage2] = useState(1);
-  const [postPerPage2] = useState(10);
-  const lastPostIndex2 = currentPage2 * postPerPage2;
-  const firstPostIndex2 = lastPostIndex2 - postPerPage2;
-
-  let pages2 = [];
-
-  const TotolData = query
-    ? data?.filter((i) =>
-        i?.service?.toLowerCase().includes(query?.toLowerCase())
-      )
-    : data;
-
-  useEffect(() => {
-    if (query) {
-      setCurrentPage2(1);
+    // Pagination and Filter
+    const [query, setQuery] = useState("");
+    const [currentPage2, setCurrentPage2] = useState(1);
+    const [postPerPage2] = useState(10);
+    const lastPostIndex2 = currentPage2 * postPerPage2;
+    const firstPostIndex2 = lastPostIndex2 - postPerPage2;
+  
+    let pages2 = [];
+  
+    const TotolData = query
+      ? data?.filter((i) =>
+          i?.service?.toLowerCase().includes(query?.toLowerCase())
+        )
+      : data;
+  
+    useEffect(() => {
+      if (query) {
+        setCurrentPage2(1);
+      }
+    }, [query]);
+  
+    const slicedData = TotolData?.slice(firstPostIndex2, lastPostIndex2);
+  
+    for (let i = 1; i <= Math.ceil(TotolData?.length / postPerPage2); i++) {
+      pages2.push(i);
     }
-  }, [query]);
-
-  const slicedData = TotolData?.slice(firstPostIndex2, lastPostIndex2);
-
-  for (let i = 1; i <= Math.ceil(TotolData?.length / postPerPage2); i++) {
-    pages2.push(i);
-  }
-
-  function Next() {
-    setCurrentPage2(currentPage2 + 1);
-  }
-
-  function Prev() {
-    if (currentPage2 !== 1) {
-      setCurrentPage2(currentPage2 - 1);
+  
+    function Next() {
+      setCurrentPage2(currentPage2 + 1);
     }
-  }
+  
+    function Prev() {
+      if (currentPage2 !== 1) {
+        setCurrentPage2(currentPage2 - 1);
+      }
+    }
+  
 
   const fetchData = async () => {
     try {
@@ -140,7 +141,7 @@ const Service = () => {
           {
             image,
             service,
-            subservices: subServices,
+            subservices : subServices
           }
         );
         console.log(data);
@@ -160,24 +161,11 @@ const Service = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {edit ? " Edit  " : "Add"} Service
+          {edit ? " Edit  " : "Add"}  Service
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={edit ? putHandler : postHandler}>
-            {spinActivate ? (
-              <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            ) : (
-              ""
-            )}
-
-            {imageStatus ? (
-              <Alert variant="success">Image Uploaded </Alert>
-            ) : (
-              ""
-            )}
+          <Form onSubmit={postHandler}>
             <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
               <Form.Control type="file" onChange={(e) => uploadImage(e)} />
@@ -234,17 +222,14 @@ const Service = () => {
         onHide={() => setModalShow(false)}
       />
 
-      <Navbar setQuery={setQuery} />
+<Navbar  setQuery={setQuery} />
 
       <div className="Head">
         <div>
           <h4>Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button  onClick={() => {
-              setEdit(false);
-              setModalShow(true);
-            }}> + Create New</button>
+          <button onClick={() => setModalShow(true)}> + Create New</button>
         </div>
       </div>
 
@@ -275,19 +260,11 @@ const Service = () => {
                   ))}
                 </td>
                 <td>
-                <span style={{ display: "flex", gap: "5px" }}>
+                  <span>
                     <i
                       className="fa-solid fa-trash"
                       onClick={() => deleteHandler(i._id)}
                     ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
                   </span>
                 </td>
               </tr>
@@ -296,48 +273,50 @@ const Service = () => {
         </Table>
       </div>
 
-      <div className="pagination">
-        <button onClick={() => Prev()} className="prevBtn">
-          <i className="fa-solid fa-backward"></i>
-        </button>
-        {currentPage2 === 1 ? (
-          ""
-        ) : (
-          <button onClick={() => setCurrentPage2(1)}>1</button>
-        )}
 
-        {pages2?.slice(currentPage2 - 1, currentPage2 + 3).map((i, index) =>
-          i === pages2?.length ? (
-            ""
-          ) : (
+      
+      <div className="pagination">
+            <button onClick={() => Prev()} className="prevBtn">
+              <i className="fa-solid fa-backward"></i>
+            </button>
+            {currentPage2 === 1 ? (
+              ""
+            ) : (
+              <button onClick={() => setCurrentPage2(1)}>1</button>
+            )}
+
+            {pages2?.slice(currentPage2 - 1, currentPage2 + 3).map((i, index) =>
+              i === pages2?.length ? (
+                ""
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage2(i)}
+                  className={currentPage2 === i ? "activePage" : ""}
+                >
+                  {" "}
+                  {i}{" "}
+                </button>
+              )
+            )}
+
             <button
-              key={index}
-              onClick={() => setCurrentPage2(i)}
-              className={currentPage2 === i ? "activePage" : ""}
+              onClick={() => setCurrentPage2(pages2?.length)}
+              className={currentPage2 === pages2?.length ? "activePage" : ""}
             >
               {" "}
-              {i}{" "}
+              {pages2?.length}{" "}
             </button>
-          )
-        )}
 
-        <button
-          onClick={() => setCurrentPage2(pages2?.length)}
-          className={currentPage2 === pages2?.length ? "activePage" : ""}
-        >
-          {" "}
-          {pages2?.length}{" "}
-        </button>
-
-        {currentPage2 === pages2?.length ? (
-          ""
-        ) : (
-          <button onClick={() => Next()} className="nextBtn">
-            {" "}
-            <i className="fa-sharp fa-solid fa-forward"></i>
-          </button>
-        )}
-      </div>
+            {currentPage2 === pages2?.length ? (
+              ""
+            ) : (
+              <button onClick={() => Next()} className="nextBtn">
+                {" "}
+                <i className="fa-sharp fa-solid fa-forward"></i>
+              </button>
+            )}
+          </div>
     </>
   );
 };

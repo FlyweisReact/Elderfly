@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import HOC from "./HOC";
-import { Alert, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import axios from "axios";
 import { Form, Modal, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -71,7 +71,7 @@ const SubService = () => {
     const [subServices, setSubService] = useState("");
     const [colour, setColor] = useState("");
     const [spinActivate, setSpinActivate] = useState(false);
-    const [imageStatus, setImageStatus] = useState(false);
+    const [ imageStatus , setImageStatus ] = useState(false)
 
     const uploadImage = (e) => {
       setSpinActivate(true);
@@ -87,7 +87,7 @@ const SubService = () => {
         .then((data) => {
           setImage(data.url);
           setSpinActivate(false);
-          setImageStatus(true);
+          setImage
         })
         .catch((err) => {
           console.log(err);
@@ -136,6 +136,7 @@ const SubService = () => {
     return (
       <Modal
         {...props}
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -150,12 +151,6 @@ const SubService = () => {
               <Spinner animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
-            ) : (
-              ""
-            )}
-
-            {imageStatus ? (
-              <Alert variant="success">Image Uploaded </Alert>
             ) : (
               ""
             )}

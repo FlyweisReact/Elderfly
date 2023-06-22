@@ -13,8 +13,7 @@ import Navbar from "../navbar";
 
 const ConciergService = () => {
   const [data, setData] = useState([]);
-  const [modalShow, setModalShow] = useState(false)
-  const [edit, setEdit] = useState(false);
+  const [modalShow, setModalShow] = useState(false);\  const [edit, setEdit] = useState(false);
   const [id, setId] = useState("");
 
   // Pagination and Filter
@@ -148,11 +147,11 @@ const ConciergService = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          {edit ? " Edit  " : "Add"}  Concierg Service{" "}
+            Add Concierg Service{" "}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={edit ? putHandler : postHandler}>
+          <Form onSubmit={postHandler}>
             <Form.Select
               aria-label="Default select example"
               className="mb-3"
@@ -214,10 +213,7 @@ const ConciergService = () => {
           <h4>Concierge Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button  onClick={() => {
-              setEdit(false);
-              setModalShow(true);
-            }}> + Create New</button>
+          <button onClick={() => setModalShow(true)}> + Create New</button>
         </div>
       </div>
 
@@ -269,20 +265,12 @@ const ConciergService = () => {
                     ))}
                   </td>
                   <td>
-                  <span style={{ display: "flex", gap: "5px" }}>
-                    <i
-                      className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
-                    ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
-                  </span>
+                    <span>
+                      <i
+                        className="fa-solid fa-trash"
+                        onClick={() => deleteHandler(i._id)}
+                      ></i>
+                    </span>
                   </td>
                 </tr>
               ))}

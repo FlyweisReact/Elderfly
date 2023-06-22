@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import HOC from "./HOC";
-import { Alert, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import axios from "axios";
-import { Form, Modal, Spinner } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Navbar from "./navbar";
 
@@ -70,11 +70,8 @@ const SubService = () => {
     const [image, setImage] = useState("");
     const [subServices, setSubService] = useState("");
     const [colour, setColor] = useState("");
-    const [spinActivate, setSpinActivate] = useState(false);
-    const [imageStatus, setImageStatus] = useState(false);
 
     const uploadImage = (e) => {
-      setSpinActivate(true);
       const data = new FormData();
       data.append("file", e.target.files[0]);
       data.append("upload_preset", "ml_default");
@@ -86,8 +83,6 @@ const SubService = () => {
         .then((res) => res.json())
         .then((data) => {
           setImage(data.url);
-          setSpinActivate(false);
-          setImageStatus(true);
         })
         .catch((err) => {
           console.log(err);
@@ -136,6 +131,7 @@ const SubService = () => {
     return (
       <Modal
         {...props}
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -146,20 +142,6 @@ const SubService = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={edit ? putHandler : postHandler}>
-            {spinActivate ? (
-              <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            ) : (
-              ""
-            )}
-
-            {imageStatus ? (
-              <Alert variant="success">Image Uploaded </Alert>
-            ) : (
-              ""
-            )}
-
             <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
               <Form.Control type="file" onChange={(e) => uploadImage(e)} />
@@ -219,15 +201,10 @@ const SubService = () => {
           <h4>Sub-Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button
-            onClick={() => {
-              setEdit(false);
-              setModalShow(true);
-            }}
-          >
-            {" "}
-            + Create New
-          </button>
+          <button onClick={() => {
+            setEdit(false)
+            setModalShow(true)
+          }}> + Create New</button>
         </div>
       </div>
 
@@ -252,20 +229,20 @@ const SubService = () => {
                 <td>{i.subServices}</td>
                 <td>{i.colour}</td>
                 <td>
-                  <span style={{ display: "flex", gap: "5px" }}>
-                    <i
-                      className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
-                    ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
-                  </span>
+                <span style={{display : 'flex' , gap : '5px'}}>
+                <i
+                    className="fa-solid fa-trash"
+                    onClick={() => deleteHandler(i._id)}
+                  ></i>
+                  <i
+                    className="fa-solid fa-pen-to-square"
+                    onClick={() => {
+                      setId(i._id);
+                      setEdit(true);
+                      setModalShow(true);
+                    }}
+                  />
+                </span>
                 </td>
               </tr>
             ))}

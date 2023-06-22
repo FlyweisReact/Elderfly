@@ -152,7 +152,7 @@ const ConciergService = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={edit ? putHandler : postHandler}>
+          <Form onSubmit={postHandler}>
             <Form.Select
               aria-label="Default select example"
               className="mb-3"
@@ -214,10 +214,7 @@ const ConciergService = () => {
           <h4>Concierge Service (Total : {data?.length}) </h4>
         </div>
         <div>
-          <button  onClick={() => {
-              setEdit(false);
-              setModalShow(true);
-            }}> + Create New</button>
+          <button onClick={() => setModalShow(true)}> + Create New</button>
         </div>
       </div>
 
@@ -269,20 +266,12 @@ const ConciergService = () => {
                     ))}
                   </td>
                   <td>
-                  <span style={{ display: "flex", gap: "5px" }}>
-                    <i
-                      className="fa-solid fa-trash"
-                      onClick={() => deleteHandler(i._id)}
-                    ></i>
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setId(i._id);
-                        setEdit(true);
-                        setModalShow(true);
-                      }}
-                    />
-                  </span>
+                    <span>
+                      <i
+                        className="fa-solid fa-trash"
+                        onClick={() => deleteHandler(i._id)}
+                      ></i>
+                    </span>
                   </td>
                 </tr>
               ))}
