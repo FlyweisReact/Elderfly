@@ -68,11 +68,11 @@ const Service = () => {
 
   function MyVerticallyCenteredModal(props) {
     const [image, setImage] = useState("");
+    const [subServices, setSubService] = useState([]);
     const [service, setService] = useState("");
     const [subData, setSubData] = useState([]);
     const [spinActivate, setSpinActivate] = useState(false);
     const [imageStatus, setImageStatus] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState([]);
 
     const getSubService = async () => {
       try {
@@ -119,7 +119,7 @@ const Service = () => {
           "https://nishant-jain12.vercel.app/api/v1/servic",
           {
             image,
-            subservices: selectedOptions,
+            subservices: subServices,
             service,
           }
         );
@@ -140,7 +140,7 @@ const Service = () => {
           {
             image,
             service,
-            subservices: selectedOptions,
+            subservices: subServices,
           }
         );
         console.log(data);
@@ -152,12 +152,10 @@ const Service = () => {
       }
     };
 
-
-    
-  const handleSelectChange = (event) => {
-    const selectedIds = Array.from(event.target.selectedOptions, (option) => option.value);
-    setSelectedOptions(selectedIds);
-  };
+    const HandlerSelctor = (curr) => {
+      setSubService((prev) => [...prev , curr])
+    }
+console.log(subServices)
 
     return (
       <Modal
@@ -201,8 +199,8 @@ const Service = () => {
             <Form.Select
               aria-label="Default select example"
               className="mb-3"
-      
-              multiple value={selectedOptions} onChange={handleSelectChange}
+              onChange={(e) => HandlerSelctor(e.target.value)}
+              multiple
             >
               <option>-- Select Sub-Service --</option>
               {subData?.map((i, index) => (

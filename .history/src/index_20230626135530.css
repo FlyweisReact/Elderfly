@@ -587,8 +587,7 @@ code {
   padding: 0;
   /* position: relative; */
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  justify-content: ;
 }
 .sub-box-item-top {
   margin: 0;

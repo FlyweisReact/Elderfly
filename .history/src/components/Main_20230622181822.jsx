@@ -65,7 +65,6 @@ const Main = () => {
               <input
                 className="ip"
                 type="password"
-                name="password"
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
               />

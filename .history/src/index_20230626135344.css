@@ -580,15 +580,12 @@ code {
   border: 1px solid #913c7f;
   margin-top: 20px;
   width: 332px;
-  min-height: 541px;
+  height: 541px;
   background: #ffffff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   padding: 0;
-  /* position: relative; */
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  position: relative;
 }
 .sub-box-item-top {
   margin: 0;
@@ -634,11 +631,10 @@ code {
   display: flex;
   justify-content: center;
   gap: 10px;
-  /* position: absolute; */
-  /* top: 90%; */
-  /* left: 50%; */
-  /* transform: translate(-50%, -50%); */
-  padding-bottom: 10px;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .sub-box-item-below button {
@@ -1566,7 +1562,7 @@ code {
   width: 200px;
   
 }
-.Three-Cont2 {
+.Three-Cont2 {Three-Cont
   display: flex;
   justify-content: space-between;
   padding: 40px;

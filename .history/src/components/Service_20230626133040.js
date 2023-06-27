@@ -68,6 +68,7 @@ const Service = () => {
 
   function MyVerticallyCenteredModal(props) {
     const [image, setImage] = useState("");
+    const [subServices, setSubService] = useState([]);
     const [service, setService] = useState("");
     const [subData, setSubData] = useState([]);
     const [spinActivate, setSpinActivate] = useState(false);

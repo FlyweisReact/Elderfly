@@ -1,16 +1,19 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import HOC from "./HOC";
-import { Alert, Spinner, Table } from "react-bootstrap";
+import HOC from "../HOC";
+import { Alert, Table } from "react-bootstrap";
 import axios from "axios";
 import { Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
-import Navbar from "./navbar";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Navbar from "../navbar";
 
-const Service = () => {
+const ConciergService = () => {
   const [data, setData] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState(false)
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState("");
 
@@ -24,8 +27,10 @@ const Service = () => {
   let pages2 = [];
 
   const TotolData = query
-    ? data?.filter((i) =>
-        i?.service?.toLowerCase().includes(query?.toLowerCase())
+    ? data?.filter((item) =>
+        item?.services?.filter((i) =>
+          i?.service?.toLowerCase().includes(query?.toLowerCase())
+        )
       )
     : data;
 
@@ -54,7 +59,7 @@ const Service = () => {
   const fetchData = async () => {
     try {
       const { data } = await axios.get(
-        "https://nishant-jain12.vercel.app/api/v1/servic"
+        "https://nishant-jain12.vercel.app/api/v1/conciergeser"
       );
       setData(data.msg);
     } catch (e) {
@@ -64,63 +69,41 @@ const Service = () => {
 
   useEffect(() => {
     fetchData();
+    window.scrollTo(0, 0);
   }, []);
 
   function MyVerticallyCenteredModal(props) {
-    const [image, setImage] = useState("");
-    const [service, setService] = useState("");
-    const [subData, setSubData] = useState([]);
-    const [spinActivate, setSpinActivate] = useState(false);
-    const [imageStatus, setImageStatus] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [services, setServices] = useState([]);
+    const [name, setName] = useState([]);
 
-    const getSubService = async () => {
+    const addService = (newService) => {
+      setName((prevServices) => [...prevServices, newService]);
+    };
+
+    const fetchServices = async () => {
       try {
         const { data } = await axios.get(
-          "https://nishant-jain12.vercel.app/api/v1/subservi"
+          "https://nishant-jain12.vercel.app/api/v1/servic"
         );
-        setSubData(data);
+        setServices(data.msg);
       } catch (e) {
         console.log(e);
       }
     };
 
     useEffect(() => {
-      if (props.show === true) {
-        getSubService();
+      if (props.show) {
+        fetchServices();
       }
     }, [props.show]);
-
-    const uploadImage = (e) => {
-      setSpinActivate(true);
-      const data = new FormData();
-      data.append("file", e.target.files[0]);
-      data.append("upload_preset", "ml_default");
-      data.append("cloud_name", "dbcnha741");
-      fetch("https://api.cloudinary.com/v1_1/dbcnha741/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setImage(data.url);
-          setSpinActivate(false);
-          setImageStatus(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
 
     const postHandler = async (e) => {
       e.preventDefault();
       try {
         const { data } = await axios.post(
-          "https://nishant-jain12.vercel.app/api/v1/servic",
+          "https://nishant-jain12.vercel.app/api/v1/conciergeser",
           {
-            image,
-            subservices: selectedOptions,
-            service,
+            services: name,
           }
         );
         console.log(data);
@@ -136,11 +119,9 @@ const Service = () => {
       e.preventDefault();
       try {
         const { data } = await axios.put(
-          `https://nishant-jain12.vercel.app/api/v1/servic/${id}`,
+          `https://nishant-jain12.vercel.app/api/v1/conciergeser/${id}`,
           {
-            image,
-            service,
-            subservices: selectedOptions,
+            services: name,
           }
         );
         console.log(data);
@@ -152,12 +133,12 @@ const Service = () => {
       }
     };
 
-
     
   const handleSelectChange = (event) => {
-    const selectedIds = Array.from(event.target.selectedOptions, (option) => option.value);
-    setSelectedOptions(selectedIds);
+    const selectedService = event.target.value;
+    addService(selectedService);
   };
+
 
     return (
       <Modal
@@ -167,48 +148,22 @@ const Service = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {edit ? " Edit  " : "Add"} Service
+          {edit ? " Edit  " : "Add"}  Concierg Service{" "}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={edit ? putHandler : postHandler}>
-            {spinActivate ? (
-              <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            ) : (
-              ""
-            )}
-
-            {imageStatus ? (
-              <Alert variant="success">Image Uploaded </Alert>
-            ) : (
-              ""
-            )}
-            <Form.Group className="mb-3">
-              <Form.Label>Image</Form.Label>
-              <Form.Control type="file" onChange={(e) => uploadImage(e)} />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Service Name</Form.Label>
-              <Form.Control
-                type="text"
-                onChange={(e) => setService(e.target.value)}
-              />
-            </Form.Group>
-
             <Form.Select
               aria-label="Default select example"
               className="mb-3"
-      
-              multiple value={selectedOptions} onChange={handleSelectChange}
+              multiple
+              onChange={handleSelectChange}
             >
-              <option>-- Select Sub-Service --</option>
-              {subData?.map((i, index) => (
+              <option disabled>Select Services</option>
+              {services?.map((i, index) => (
                 <option key={index} value={i._id}>
                   {" "}
-                  {i.subServices}{" "}
+                  {i.service}{" "}
                 </option>
               ))}
             </Form.Select>
@@ -222,12 +177,22 @@ const Service = () => {
     );
   }
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
+
   const deleteHandler = async (id) => {
     try {
       const { data } = await axios.delete(
-        `https://nishant-jain12.vercel.app/api/v1/servic/${id}`
+        `https://nishant-jain12.vercel.app/api/v1/conciergeser/${id}`
       );
-      console.log(data.message);
+      console.log(data);
       toast.success("Deleted");
       fetchData();
     } catch (e) {
@@ -246,7 +211,7 @@ const Service = () => {
 
       <div className="Head">
         <div>
-          <h4>Service (Total : {data?.length}) </h4>
+          <h4>Concierge Service (Total : {data?.length}) </h4>
         </div>
         <div>
           <button  onClick={() => {
@@ -256,34 +221,53 @@ const Service = () => {
         </div>
       </div>
 
-      <div className="overflowCont">
-        <Table className="NewTable">
-          <thead>
-            <tr>
-              <td>Number</td>
-              <td>Image</td>
-              <td> Service </td>
-              <td> Sub-Service </td>
-              <td>Options</td>
-            </tr>
-          </thead>
-          <tbody>
-            {slicedData?.map((i, index) => (
-              <tr key={index}>
-                <td> #{index + 1} </td>
-                <td>
-                  <img src={i.image} alt="" style={{ width: "60px" }} />
-                </td>
-                <td>{i.service}</td>
-                <td>
-                  {i.subservices?.map((item, index) => (
-                    <ul key={index}>
-                      <li> {item.subServices} </li>
-                    </ul>
-                  ))}
-                </td>
-                <td>
-                <span style={{ display: "flex", gap: "5px" }}>
+      {data?.length === 0 || !data ? (
+        <Alert style={{ width: "90%", margin: "auto", marginTop: "20px" }}>
+          No Data Found
+        </Alert>
+      ) : (
+        <div className="overflowCont">
+          <Table className="NewTable">
+            <thead>
+              <tr>
+                <td>Number</td>
+                <td>Image</td>
+                <td>Service</td>
+                <td>Color</td>
+                <td>Options</td>
+              </tr>
+            </thead>
+            <tbody>
+              {slicedData?.map((i, index) => (
+                <tr key={index}>
+                  <td> #{index + 1} </td>
+                  <td>
+                      {i.services?.map((item, index) => (
+                        <img
+                          src={item.image}
+                          alt=""
+                          key={index}
+                          style={{ width: "60px" }}
+                        />
+                      ))}
+                  </td>
+
+                  <td>
+                    {i.services?.map((item, index) => (
+                      <ul key={index}>
+                        <li> {item.service} </li>
+                      </ul>
+                    ))}
+                  </td>
+                  <td>
+                    {i.services?.map((item, index) => (
+                      <ul key={index}>
+                        <li> {item.colour} </li>
+                      </ul>
+                    ))}
+                  </td>
+                  <td>
+                  <span style={{ display: "flex", gap: "5px" }}>
                     <i
                       className="fa-solid fa-trash"
                       onClick={() => deleteHandler(i._id)}
@@ -297,13 +281,13 @@ const Service = () => {
                       }}
                     />
                   </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      )}
       <div className="pagination">
         <button onClick={() => Prev()} className="prevBtn">
           <i className="fa-solid fa-backward"></i>
@@ -350,4 +334,4 @@ const Service = () => {
   );
 };
 
-export default HOC(Service);
+export default HOC(ConciergService);

@@ -68,6 +68,7 @@ const Service = () => {
 
   function MyVerticallyCenteredModal(props) {
     const [image, setImage] = useState("");
+    const [subServices, setSubService] = useState([]);
     const [service, setService] = useState("");
     const [subData, setSubData] = useState([]);
     const [spinActivate, setSpinActivate] = useState(false);
@@ -119,7 +120,7 @@ const Service = () => {
           "https://nishant-jain12.vercel.app/api/v1/servic",
           {
             image,
-            subservices: selectedOptions,
+            subservices: subServices,
             service,
           }
         );
@@ -140,7 +141,7 @@ const Service = () => {
           {
             image,
             service,
-            subservices: selectedOptions,
+            subservices: subServices,
           }
         );
         console.log(data);
@@ -152,12 +153,16 @@ const Service = () => {
       }
     };
 
+    const HandlerSelctor = (curr) => {
+      setSubService((prev) => [...prev , curr])
+    }
 
     
   const handleSelectChange = (event) => {
     const selectedIds = Array.from(event.target.selectedOptions, (option) => option.value);
     setSelectedOptions(selectedIds);
   };
+
 
     return (
       <Modal
